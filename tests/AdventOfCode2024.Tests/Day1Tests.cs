@@ -2,19 +2,19 @@ using AdventOfCode2024.Code;
 
 namespace AdventOfCode2024.Tests;
 
-public class Day3Tests
+public class Day1Tests
 {
     [Fact]
     public void Day1_Solution1()
     {
         var day = new Day1("Day1Test");
-        Assert.Equal("4361", day.Solution1());
+        Assert.Equal("11", day.Solution1());
     }
 
     [Fact]
     public void Day1_Solution2()
     {
         var day = new Day1("Day1Test");
-        Assert.Equal("467835", day.Solution2());
+        Assert.Equal("31", day.Solution2());
     }
 }
