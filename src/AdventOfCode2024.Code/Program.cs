@@ -1,6 +1,6 @@
 ﻿using AdventOfCode2024.Code;
 
-var currentDay = new Day3();
+var currentDay = new Day5();
 var solution1 = currentDay.Solution1();
 var solution2 = currentDay.Solution2();
 Console.WriteLine($"Solutions for {currentDay.GetType().Name}:");
