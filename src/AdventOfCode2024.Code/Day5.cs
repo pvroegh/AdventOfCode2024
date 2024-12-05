@@ -18,10 +18,10 @@ public class Day5 : BaseDay
 
     public override string Solution1()
     {
-        return _toProduce.Select((toProduce, index) => GetMiddlePageNumber(toProduce, index)).Sum().ToString();
+        return _toProduce.Select((toProduce, index) => GetMiddlePageNumberForCorrect(toProduce, index)).Sum().ToString();
     }
 
-    private int GetMiddlePageNumber(int[] toProduce, int index)
+    private int GetMiddlePageNumberForCorrect(int[] toProduce, int index)
     {
         if (IsCorrectOrder(toProduce))
         {
@@ -50,5 +50,42 @@ public class Day5 : BaseDay
         }
 
         return true;
+    }
+
+    public override string Solution2()
+    {
+        return _toProduce.Select((toProduce, index) => GetMiddlePageNumberForIncorrect(toProduce, index)).Sum().ToString();
+    }
+
+    private int GetMiddlePageNumberForIncorrect(int[] toProduce, int index)
+    {
+        if (!IsCorrectOrder(toProduce))
+        {
+            int Compare(int a, int b)
+            {
+                if (_rulesForward.ContainsKey(a))
+                {
+                    if (_rulesForward[a].Contains(b))
+                    {
+                        return 1;
+                    }
+                }
+
+                if (_rulesBackward.ContainsKey(a))
+                {
+                    if (_rulesBackward[a].Contains(b))
+                    {
+                        return -1;
+                    }
+                }
+
+                return 0;
+            }
+            Array.Sort(toProduce, Compare);         
+            
+            return toProduce[toProduce.Length / 2];
+        }
+
+        return 0;
     }
 }
