@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using System.Text;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace AdventOfCode2024.Code;
 
@@ -12,53 +13,57 @@ public class Day11 : BaseDay
 
     public override string Solution1()
     {
-        var stones = new List<long>(Input[0].Split(' ').Select(long.Parse));
-
+        var rocks = new List<long>(Input[0].Split(' ').Select(long.Parse)).ToDictionary(r => r, _ => (long)1);
         foreach (var index in Enumerable.Range(0, 25))
         {
-            stones = Blink(stones);
+            rocks = Blink(rocks);
         }
 
-        return stones.Count.ToString();
+        return rocks.Values.Sum().ToString();
     }
 
     public override string Solution2()
     {
-        var stones = new List<long>(Input[0].Split(' ').Select(long.Parse));
-
+        var rocks = new List<long>(Input[0].Split(' ').Select(long.Parse)).ToDictionary(r => r, _ => (long)1);
         foreach (var index in Enumerable.Range(0, 75))
         {
-            var previousStoneCount = stones.Count;
-            stones = Blink(stones);
-            Console.WriteLine($"Index: {index}, Count: {stones.Count}, Diff: {stones.Count - previousStoneCount}, Divided: {stones.Count / (index + 1)}");
+            rocks = Blink(rocks);
         }
-        // TODO: optimize this
-        return stones.Count.ToString();
+
+        return rocks.Values.Sum().ToString();
     }
 
-    private List<long> Blink(List<long> stones)
+    private Dictionary<long, long> Blink(Dictionary<long, long> rocks)
     {
-        var newStones = new List<long>();
-        foreach (var stone in stones)
+        Dictionary<long, long> result = [];
+        foreach (var (rock, count) in rocks)
         {
-            if (stone == 0)
+            var newRocks = BlinkRock(rock);
+            foreach (var newRock in newRocks)
             {
-                newStones.Add(1);
-                continue;
-            }
-            else if (HasEvenDigitCount(stone, out var digitCount))
-            {
-                var divisor = (long)Math.Pow(10, digitCount / 2);
-                newStones.Add(stone / divisor);
-                newStones.Add(stone % divisor);
-            }
-            else
-            {
-                newStones.Add(stone * 2024);
+                result.TryAdd(newRock, 0);
+                result[newRock] += count;
             }
         }
         
-        return newStones;
+        return result;
+    }
+
+    private List<long> BlinkRock(long rock)
+    {
+        if (rock == 0)
+        {
+            return [1];
+        }
+        else if (HasEvenDigitCount(rock, out var digitCount))
+        {
+            var divisor = (long)Math.Pow(10, digitCount / 2);
+            return [rock / divisor, rock % divisor];
+        }
+        else
+        {
+            return [rock * 2024];
+        }
     }
 
     private bool HasEvenDigitCount(long number, out long digitCount)
