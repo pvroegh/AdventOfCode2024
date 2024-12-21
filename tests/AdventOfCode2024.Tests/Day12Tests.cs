@@ -15,6 +15,6 @@ public class Day12Tests
     public void Day12_Solution2()
     {
         var day = new Day12("Day12Test");
-        Assert.Equal("???", day.Solution2());
+        Assert.Equal("1206", day.Solution2());
     }
 }
